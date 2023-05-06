@@ -11,7 +11,9 @@ class GuardCord:
             print(f"{Fore.GREEN}[SUCCESS]{Fore.WHITE} Authorization is valid, Starting GuardCord.")
             
             sessions: dict[str] = Sessions.get()
-            print(sessions)
+            
+            for session in sessions["user_sessions"]:
+                print(session)
             
         else:
             print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
