@@ -1,5 +1,6 @@
 import httpx
 
+from helpers.config import Fetch
 from helpers.encoding import Encoding
 from helpers.useragent import UserAgent
 
