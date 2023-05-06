@@ -1,8 +1,22 @@
+import time
+
+from colorama import *
 from helpers.sessions import Sessions
+
+init(convert=True)
 
 class GuardCord:
     def start():
-        print(Sessions.get())
+        if Sessions.get() is not None:
+            print(f"{Fore.GREEN}[SUCCESS]{Fore.WHITE} Authorization is valid, Starting GuardCord.")
+            
+            sessions: dict[str] = Sessions.get()
+            print(sessions)
+            
+        else:
+            print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
+            time.sleep(6); exit(code=None)
+            
         
 if __name__ == "__main__":
     GuardCord.start()
