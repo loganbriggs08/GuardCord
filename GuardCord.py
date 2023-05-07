@@ -40,23 +40,28 @@ class GuardCord:
             print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
             time.sleep(6); exit(code=None)
             
-    def listen(self):
+    async def listen(self):
         while True:
-            if Sessions.get() is not None:
-                sessions_list: dict[str] = Sessions.get()
-                
-                for session in sessions_list["user_sessions"]:
-                    if session["id_hash"] in self.known_sessions:
-                        pass
-                    else:
-                        print("New Login detected...")
-                        
-                asyncio.sleep(4)
-            else:
-                print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
-                time.sleep(6); exit(code=None)
+            try:
+                if Sessions.get() is not None:
+                    sessions_list: dict[str] = Sessions.get()
+                    
+                    for session in sessions_list["user_sessions"]:
+                        if session["id_hash"] in self.known_sessions:
+                            print("No new sessions detected..")
+                            pass
+                        else:
+                            print("New Login detected...")
+                            
+                    await asyncio.sleep(6)
+                else:
+                    print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
+                    time.sleep(6); exit(code=None)
+                    
+            except Exception as e:
+                print(e)
                 
                 
 if __name__ == "__main__":
     GuardCord_Instance: object = GuardCord(hash_ids=Database.get_sessions())
-    GuardCord_Instance.start(); GuardCord_Instance.listen()
+    GuardCord_Instance.start(); asyncio.run(GuardCord_Instance.listen())
