@@ -1,4 +1,5 @@
 import time
+import asyncio
 
 from colorama import *
 from helpers.time import Time
@@ -40,7 +41,22 @@ class GuardCord:
             time.sleep(6); exit(code=None)
             
     def listen(self):
-        print("hereee")
+        while True:
+            if Sessions.get() is not None:
+                sessions_list: dict[str] = Sessions.get()
+                
+                for session in sessions_list["user_sessions"]:
+                    if session["id_hash"] in self.known_sessions:
+                        pass
+                    else:
+                        print("New Login detected...")
+                        
+                asyncio.sleep(4)
+            else:
+                print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
+                time.sleep(6); exit(code=None)
+                
+            
             
         
 if __name__ == "__main__":
