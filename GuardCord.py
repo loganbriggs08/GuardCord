@@ -60,7 +60,10 @@ class GuardCord:
                             menu_result: int = Menus.yes_or_no(f"{Fore.RED}[DEVICE] {operating_system.upper()}\n[PLATFORM] {platform}\n[LOCATION] {location}\n[TIME] {readable_time}\n")
                             
                             if menu_result == True:
-                                Database.add_session(session["id_hash"])
+                                session_id: str = session["id_hash"]
+                                Database.add_session(session["id_hash"], operating_system, platform)
+                                
+                                print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} Session ({session_id}) been added to the known sessions list.")
                             else:
                                 print("we need to do our stuff to log them out...")
                                 
