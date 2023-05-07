@@ -48,7 +48,6 @@ class GuardCord:
                     
                     for session in sessions_list["user_sessions"]:
                         if session["id_hash"] in self.known_sessions:
-                            print("No new sessions detected..")
                             pass
                         else:
                             print("New Login detected...")
