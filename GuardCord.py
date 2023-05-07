@@ -10,9 +10,12 @@ init(convert=True)
 Database.create_table()
 
 class GuardCord:
-    def __init__(self):
+    def __init__(self, hash_ids: list[str]):
         self.known_sessions: list[str] = []
         
+        for hash_id in hash_ids:
+            self.known_sessions.append(hash_id)
+            
     def start(self):
         if Sessions.get() is not None:
             sessions_list: dict[str] = Sessions.get()
