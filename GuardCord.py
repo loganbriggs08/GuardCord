@@ -1,6 +1,7 @@
 import os
 import time
 import asyncio
+import getpass
 
 from colorama import *
 from helpers.time import Time
@@ -27,15 +28,22 @@ class GuardCord:
             time.sleep(2);clear_console()
 
     def start(self):
-        password = str(input(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Password: "))
+        password = getpass.getpass(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Password: ")
         nonce: str = Discord.send_code_to_email(password=password)
         
         if nonce != None:
             clear_console(); print(f"{Fore.GREEN}[SUCCESS]{Fore.WHITE} A code has been sent to your email, Please enter it below.")
-            code = str(input(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Code: ")); result = Discord.get_codes(code=code, nonce=nonce)
-            print(result)
+            code = str(input(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Code: ")); result = Discord.get_codes(code=code, nonce=nonce); clear_console()
             
-            time.sleep(3); clear_console()
+            for backup_code in result["backup_codes"]:
+                if backup_code["consumed"] == False:
+                    self.backup_codes.append(backup_code["code"])
+                    backup_code: str = backup_code["code"]
+
+                    print(f"{Fore.GREEN}[BACKUP CODE]{Fore.WHITE} {backup_code} has been added to the backup codes list.")
+                    time.sleep(1); clear_console()
+                else:
+                    pass
             
             if Sessions.get() is not None:
                 sessions_list: dict[str] = Sessions.get()
