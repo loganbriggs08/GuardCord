@@ -20,6 +20,7 @@ class GuardCord:
     def __init__(self, hash_ids: list[str]):
         self.known_sessions: list[str] = []
         self.backup_codes: list[str] = []
+        self.password: str = None
         
         for hash_id in hash_ids:
             self.known_sessions.append(hash_id)
@@ -28,7 +29,7 @@ class GuardCord:
             time.sleep(2);clear_console()
 
     def start(self):
-        password = getpass.getpass(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Password: ")
+        password = getpass.getpass(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Password: "); self.password = password
         nonce: str = Discord.send_code_to_email(password=password)
         
         if nonce != None:
@@ -95,7 +96,8 @@ class GuardCord:
                                 
                                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} Session ({session_id}) been added to the known sessions list.")
                             else:
-                                print("we need to do our stuff to log them out...")
+                                new_password: str = Discord.change_password(self.get_backup_code(), self.password)
+                                print(new_password)
                                 
                     await asyncio.sleep(4)
                 else:
@@ -104,6 +106,16 @@ class GuardCord:
                     
             except Exception as e:
                 print(e)
+                
+    def get_backup_code(self) -> str:
+        if len(self.backup_codes) == 0:
+            print(f"{Fore.RED}[ERROR]{Fore.WHITE} No backup codes left, Please generate new ones.")
+            time.sleep(6); exit(code=None)
+        else:
+            backup_code: str = self.backup_codes[0]
+            self.backup_codes.remove(backup_code)
+            
+            return backup_code
                       
 if __name__ == "__main__":
     GuardCord_Instance: object = GuardCord(hash_ids=Database.get_sessions())
