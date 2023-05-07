@@ -61,7 +61,8 @@ class GuardCord:
                             
                             if menu_result == True:
                                 Database.add_session(session["id_hash"])
-                            
+                            else:
+                                print("we need to do our stuff to log them out...")
                                 
                     await asyncio.sleep(4)
                 else:
