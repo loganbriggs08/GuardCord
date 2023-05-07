@@ -23,22 +23,19 @@ class Menus:
         pressed_enter: bool = False
 
         update_text(question, pressed_that_was_me)
-        try:
-            while not pressed_enter:
-                if keyboard.is_pressed('left'):
-                    print(pressed_that_was_me)
-                    pressed_that_was_me = True
-                    update_text(question, pressed_that_was_me)
-                    time.sleep(0.1)
+
+        while not pressed_enter:
+            if keyboard.is_pressed('left'):
+                print(pressed_that_was_me)
+                pressed_that_was_me = True
+                update_text(question, pressed_that_was_me)
+                time.sleep(0.1)
+                
+            elif keyboard.is_pressed('right'):
+                pressed_that_was_me = False
+                update_text(question, pressed_that_was_me)
+                time.sleep(0.1)
+                
+            elif keyboard.is_pressed('enter'):
+                return pressed_that_was_me
                     
-                elif keyboard.is_pressed('right'):
-                    pressed_that_was_me = False
-                    update_text(question, pressed_that_was_me)
-                    time.sleep(0.1)
-                    
-                elif keyboard.is_pressed('enter'):
-                    return pressed_that_was_me
-                    
-                    
-        except Exception as e:
-            print(e)
