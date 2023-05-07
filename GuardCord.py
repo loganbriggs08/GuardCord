@@ -4,8 +4,10 @@ from colorama import *
 from helpers.time import Time
 from helpers.menus import Menus
 from helpers.sessions import Sessions
+from helpers.database import Database
 
 init(convert=True)
+Database.create_table()
 
 class GuardCord:
     def __init__(self):
