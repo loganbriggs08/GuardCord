@@ -8,23 +8,23 @@ from helpers.sessions import Sessions
 init(convert=True)
 
 class GuardCord:
-    def start():
+    def __init__(self):
+        self.known_sessions: list[str] = []
+        
+    def start(self):
         if Sessions.get() is not None:
-            sessions: dict[str] = Sessions.get()
+            sessions_list: dict[str] = Sessions.get()
             
-            for session in sessions["user_sessions"]:
-                operating_system: str = session["client_info"]["os"]
-                platform: str = session["client_info"]["platform"]
-                location: str = session["client_info"]["location"]
-                readable_time: str = Time.to_human_time(session["approx_last_used_time"])
+            for session in sessions_list["user_sessions"]:
+                session_id_hash: str = session["id_hash"]
+                self.known_sessions.append(session_id_hash)
                 
-                menu_result: int = Menus.yes_or_no(f"{Fore.RED}[DEVICE] {operating_system.upper()}\n[PLATFORM] {platform}\n[LOCATION] {location}\n[TIME] {readable_time}\n")
-                
-            
+            print(self.known_sessions)
         else:
             print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
             time.sleep(6); exit(code=None)
             
         
 if __name__ == "__main__":
-    GuardCord.start()
+    GuardCord_Instance: object = GuardCord()
+    GuardCord_Instance.start()
