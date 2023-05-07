@@ -16,6 +16,7 @@ class GuardCord:
         for hash_id in hash_ids:
             self.known_sessions.append(hash_id)
 
+
     def start(self):
         if Sessions.get() is not None:
             sessions_list: dict[str] = Sessions.get()
