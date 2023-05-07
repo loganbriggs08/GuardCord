@@ -21,10 +21,16 @@ class Menus:
     def yes_or_no(question: str) -> bool:
         pressed_that_was_me: bool = True
         pressed_enter: bool = False
+        start_time: float = time.time()
 
         update_text(question, pressed_that_was_me)
 
         while not pressed_enter:
+            if time.time() - start_time > 10:
+                clear_console()
+                pressed_that_was_me = False
+                return pressed_that_was_me
+            
             if keyboard.is_pressed('left'):
                 print(pressed_that_was_me)
                 pressed_that_was_me = True
@@ -37,5 +43,6 @@ class Menus:
                 time.sleep(0.1)
                 
             elif keyboard.is_pressed('enter'):
+                clear_console()
                 return pressed_that_was_me
                     
