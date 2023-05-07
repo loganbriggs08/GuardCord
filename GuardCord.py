@@ -61,12 +61,13 @@ class GuardCord:
                         self.known_sessions.append(session_id_hash)
                         Database.add_session(session_id_hash, operating_system, platform)
                     
-                    print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} {operating_system}, {platform} ({approx_last_used_time}) was added to the known sessions list.")
+                        print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} {operating_system}, {platform} ({approx_last_used_time}) was added to the known sessions list.")
+                        time.sleep(1); clear_console()
             else:
                 print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
                 time.sleep(6); exit(code=None)
         else:
-            print(f"{Fore.RED}[ERROR]{Fore.WHITE} Invalid password, Please try again.")
+            print(f"{Fore.RED}[ERROR]{Fore.WHITE} Invalid password or you are Ratelimited, Please try again.")
             time.sleep(6); exit(code=None)
             
     async def listen(self):
