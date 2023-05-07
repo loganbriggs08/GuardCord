@@ -51,12 +51,12 @@ class Discord:
         }
         
         payload = {
-            "password": code,
+            "password": password,
             "new_password": new_password,
         }
         
         response = httpx_client.patch("https://canary.discord.com/api/v9/users/@me", headers=headers, json=payload)
-        
+z        
         if response.status_code == 200:
             return new_password
         
