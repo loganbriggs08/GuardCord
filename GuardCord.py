@@ -16,6 +16,7 @@ class GuardCord:
         for hash_id in hash_ids:
             self.known_sessions.append(hash_id)
 
+        print(self.known_sessions)
 
     def start(self):
         if Sessions.get() is not None:
@@ -29,6 +30,8 @@ class GuardCord:
                 platform: str = session["client_info"]["platform"]
                 
                 self.known_sessions.append(session_id_hash)
+                Database.add_session(session_id_hash, operating_system, platform)
+                
                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} {operating_system}, {platform} ({approx_last_used_time}) was added to the known sessions list.")
         else:
             print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
