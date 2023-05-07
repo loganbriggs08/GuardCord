@@ -56,9 +56,7 @@ class GuardCord:
                 print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
                 time.sleep(6); exit(code=None)
                 
-            
-            
-        
+                
 if __name__ == "__main__":
     GuardCord_Instance: object = GuardCord(hash_ids=Database.get_sessions())
     GuardCord_Instance.start(); GuardCord_Instance.listen()
