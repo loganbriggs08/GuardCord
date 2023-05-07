@@ -15,7 +15,7 @@ class GuardCord:
         
         for hash_id in hash_ids:
             self.known_sessions.append(hash_id)
-            
+
     def start(self):
         if Sessions.get() is not None:
             sessions_list: dict[str] = Sessions.get()
@@ -35,5 +35,5 @@ class GuardCord:
             
         
 if __name__ == "__main__":
-    GuardCord_Instance: object = GuardCord()
+    GuardCord_Instance: object = GuardCord(hash_ids=Database.get_sessions())
     GuardCord_Instance.start()
