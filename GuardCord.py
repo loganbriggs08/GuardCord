@@ -15,8 +15,7 @@ class GuardCord:
         
         for hash_id in hash_ids:
             self.known_sessions.append(hash_id)
-
-        print(self.known_sessions)
+            print(f"{Fore.GREEN}[CACHED SESSION]{Fore.WHITE} {hash_id} has been added to known sessions.")
 
     def start(self):
         if Sessions.get() is not None:
@@ -40,7 +39,10 @@ class GuardCord:
             print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
             time.sleep(6); exit(code=None)
             
+    def listen(self):
+        print("hereee")
+            
         
 if __name__ == "__main__":
     GuardCord_Instance: object = GuardCord(hash_ids=Database.get_sessions())
-    GuardCord_Instance.start()
+    GuardCord_Instance.start(); GuardCord_Instance.listen()
