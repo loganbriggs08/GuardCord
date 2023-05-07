@@ -11,3 +11,7 @@ class Database:
     def get_sessions():
         cursor.execute("SELECT id_hash FROM sessions")
         return cursor.fetchall()
+    
+    def add_session(id_hash: str, approx_last_used_time: str, operating_system: str, platform: str):
+        cursor.execute("INSERT INTO sessions VALUES (?, ?, ?, ?)", (id_hash, approx_last_used_time, operating_system, platform))
+        connection.commit()
