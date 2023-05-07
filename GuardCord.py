@@ -24,8 +24,6 @@ class GuardCord:
                 
                 self.known_sessions.append(session_id_hash)
                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} {operating_system}, {platform} ({approx_last_used_time}) was added to the known sessions list.")
-                
-            print(self.known_sessions)
         else:
             print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
             time.sleep(6); exit(code=None)
