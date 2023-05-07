@@ -50,17 +50,27 @@ class GuardCord:
                         if session["id_hash"] in self.known_sessions:
                             pass
                         else:
-                            print("New Login detected...")
+                            self.known_sessions.append(session["id_hash"])
                             
-                    await asyncio.sleep(6)
+                            operating_system: str = session["client_info"]["os"]
+                            platform: str = session["client_info"]["platform"]
+                            location: str = session["client_info"]["location"]
+                            readable_time: str = Time.to_human_time(session["approx_last_used_time"])
+                            
+                            menu_result: int = Menus.yes_or_no(f"{Fore.RED}[DEVICE] {operating_system.upper()}\n[PLATFORM] {platform}\n[LOCATION] {location}\n[TIME] {readable_time}\n")
+                            
+                            if menu_result == True:
+                                Database.add_session(session["id_hash"])
+                            
+                                
+                    await asyncio.sleep(4)
                 else:
                     print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
                     time.sleep(6); exit(code=None)
                     
             except Exception as e:
                 print(e)
-                
-                
+                      
 if __name__ == "__main__":
     GuardCord_Instance: object = GuardCord(hash_ids=Database.get_sessions())
     GuardCord_Instance.start(); asyncio.run(GuardCord_Instance.listen())
