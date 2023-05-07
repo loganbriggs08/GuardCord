@@ -29,8 +29,11 @@ class GuardCord:
                 operating_system: str = session["client_info"]["os"]
                 platform: str = session["client_info"]["platform"]
                 
-                self.known_sessions.append(session_id_hash)
-                Database.add_session(session_id_hash, operating_system, platform)
+                if session_id_hash in self.known_sessions:
+                    continue
+                else:
+                    self.known_sessions.append(session_id_hash)
+                    Database.add_session(session_id_hash, operating_system, platform)
                 
                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} {operating_system}, {platform} ({approx_last_used_time}) was added to the known sessions list.")
         else:
