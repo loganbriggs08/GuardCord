@@ -96,8 +96,8 @@ class GuardCord:
                                 
                                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} Session ({session_id}) been added to the known sessions list.")
                             else:
-                                new_password: str = Discord.change_password(self.get_backup_code(), self.password)
-                                print(new_password)
+                                response: str = Discord.change_password(self.get_backup_code(), self.password)
+                               
                                 
                     await asyncio.sleep(4)
                 else:
