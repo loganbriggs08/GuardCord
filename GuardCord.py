@@ -94,7 +94,7 @@ class GuardCord:
                             location: str = session["client_info"]["location"]
                             readable_time: str = Time.to_human_time(session["approx_last_used_time"])
                             
-                            Notifications.send(f"Discord - {platform}", "Someone has logged into your account, please check the console.", 4)
+                            Notifications.send(f"Discord - {platform.capitalize()}", "Someone has logged into your account, please check the console.", 4)
                             menu_result: int = Menus.yes_or_no(f"{Fore.RED}[DEVICE] {operating_system.upper()}\n[PLATFORM] {platform}\n[LOCATION] {location}\n[TIME] {readable_time}\n")
                             
                             if menu_result == True:
@@ -104,17 +104,22 @@ class GuardCord:
                                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} Session ({session_id}) been added to the known sessions list.")
                             else:
                                 response: str = Discord.change_password(self.get_backup_code(), self.password)
-                                new_password: str = response["new_password"]; new_token: str = response["new_token"]
                                 
-                                Database.update_password(new_password); Database.update_token(new_token)
-                                
-                                with open("config.json", "r+") as jsonFile:
-                                    config_data = json.load(jsonFile)
-                                    config_data["account"]["authorization_token"] = new_token
-
-                                    jsonFile.seek(0); json.dump(config_data, jsonFile); jsonFile.truncate()
+                                if response == None:
+                                    Notifications.send("GuardCord - Fatal Error", "We detected a login but we couldn't change the password.", 4)
+                                    print(f"{Fore.RED}[FATAL ERROR]{Fore.WHITE} We detected a login but we couldn't change the password, Please restart the program.")
+                                else:
+                                    new_password: str = response["new_password"]; new_token: str = response["new_token"]
                                     
-                                print(f"{Fore.GREEN}[PASSWORD CHANGED]{Fore.WHITE} Password has been changed, Restarting the program...")
+                                    Database.update_password(new_password); Database.update_token(new_token)
+                                    
+                                    with open("config.json", "r+") as jsonFile:
+                                        config_data = json.load(jsonFile)
+                                        config_data["account"]["authorization_token"] = new_token
+
+                                        jsonFile.seek(0); json.dump(config_data, jsonFile); jsonFile.truncate()
+                                        
+                                    print(f"{Fore.GREEN}[PASSWORD CHANGED]{Fore.WHITE} Password has been changed, Restarting the program...")
                                 
                     await asyncio.sleep(4)
                 else:
