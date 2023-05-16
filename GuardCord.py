@@ -120,6 +120,12 @@ class GuardCord:
                                         jsonFile.seek(0); json.dump(config_data, jsonFile); jsonFile.truncate()
                                         
                                     print(f"{Fore.GREEN}[PASSWORD CHANGED]{Fore.WHITE} Password has been changed, Restarting the program...")
+                                    
+                                    if os.name == "nt":
+                                        subprocess.call("start.bat", shell=True); exit(code=None)
+                                    else:
+                                        subprocess.call("start.sh", shell=True); exit(code=None)
+
                                 
                     await asyncio.sleep(4)
                 else:
