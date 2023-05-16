@@ -43,7 +43,7 @@ class Discord:
         else:
             None
             
-    def change_password(code: str, password: str) -> Union[None, dict[str]]]:
+    def change_password(code: str, password: str) -> Union[None, dict[str]]:
         new_password: str = Random.string(25)
         
         headers = {
