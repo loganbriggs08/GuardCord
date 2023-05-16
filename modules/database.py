@@ -61,17 +61,16 @@ class Database:
             cursor.execute("UPDATE account_information SET token = ?", (token,))
             connection.commit(); return True
             
-    def add_backup_codes(backup_codes: list[str]) -> bool:
+    def add_backup_code(backup_code: str) -> bool:
         try:
-            for backup_code in backup_codes:
-                cursor.execute("INSERT INTO backup_codes VALUES (?)", (backup_code,))
-                connection.commit()
+            cursor.execute("INSERT INTO backup_codes VALUES (?)", (backup_code,))
+            connection.commit()
                 
             return True
         except:
             return False
         
-    def get_backup_codes() -> list[str]:
+    def get_backup_code() -> list[str]:
         cursor.execute("SELECT * FROM backup_codes")
         result = cursor.fetchone()
         
