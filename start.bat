@@ -1,2 +1,2 @@
 @echo off
-python3 GuardCord.py
+python GuardCord.py
