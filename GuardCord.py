@@ -23,7 +23,6 @@ def clear_console():
 class GuardCord:
     def __init__(self, hash_ids: list[str]):
         self.known_sessions: list[str] = []
-        self.backup_codes: list[str] = []
         self.password: str = None
         
         for hash_id in hash_ids:
@@ -33,24 +32,53 @@ class GuardCord:
             time.sleep(2);clear_console()
 
     def start(self):
-        password = getpass.getpass(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Password: "); self.password = password
-        Database.update_password(password)
-        
-        nonce: str = Discord.send_code_to_email(password=password)
-        
-        if nonce != None:
-            clear_console(); print(f"{Fore.GREEN}[SUCCESS]{Fore.WHITE} A code has been sent to your email, Please enter it below.")
-            code = str(input(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Code: ")); result = Discord.get_codes(code=code, nonce=nonce); clear_console()
+        if Database.get_backup_code_count() == 0:
+            password = getpass.getpass(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Password: "); self.password = password
+            Database.update_password(password)
             
-            for backup_code in result["backup_codes"]:
-                if backup_code["consumed"] == False:
-                    self.backup_codes.append(backup_code["code"])
-                    backup_code: str = backup_code["code"]
+            nonce: str = Discord.send_code_to_email(password=password)
+            
+            if nonce != None:
+                clear_console(); print(f"{Fore.GREEN}[SUCCESS]{Fore.WHITE} A code has been sent to your email, Please enter it below.")
+                code = str(input(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Code: ")); result = Discord.get_codes(code=code, nonce=nonce); clear_console()
+                
+                for backup_code in result["backup_codes"]:
+                    if backup_code["consumed"] == False:
+                        Database.add_backup_code(backup_code["code"])
+                        backup_code: str = backup_code["code"]
 
-                    print(f"{Fore.GREEN}[BACKUP CODE]{Fore.WHITE} {backup_code} has been added to the backup codes list.")
-                    time.sleep(1); clear_console()
+                        print(f"{Fore.GREEN}[BACKUP CODE]{Fore.WHITE} {backup_code} has been added to the backup codes list.")
+                        time.sleep(1); clear_console()
+                    else:
+                        pass
+                
+                if Sessions.get() is not None:
+                    sessions_list: dict[str] = Sessions.get(); Database.update_token(Fetch.authorization_token())
+                    
+                    for session in sessions_list["user_sessions"]:
+                        session_id_hash: str = session["id_hash"]
+                        approx_last_used_time: str = Time.to_human_time(session["approx_last_used_time"])
+                        
+                        operating_system: str = session["client_info"]["os"]
+                        platform: str = session["client_info"]["platform"]
+                        
+                        if session_id_hash in self.known_sessions:
+                            continue
+                        else:
+                            self.known_sessions.append(session_id_hash)
+                            Database.add_session(session_id_hash, operating_system, platform)
+                        
+                            print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} {operating_system}, {platform} ({approx_last_used_time}) was added to the known sessions list.")
+                            time.sleep(1); clear_console()
                 else:
-                    pass
+                    print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
+                    time.sleep(6); exit(code=None)
+            else:
+                print(f"{Fore.RED}[ERROR]{Fore.WHITE} Invalid password or you are Ratelimited, Please try again.")
+                time.sleep(6); exit(code=None)
+                
+        else:
+            self.password = Database.get_password()
             
             if Sessions.get() is not None:
                 sessions_list: dict[str] = Sessions.get(); Database.update_token(Fetch.authorization_token())
@@ -73,9 +101,6 @@ class GuardCord:
             else:
                 print(f"{Fore.RED}[ERROR]{Fore.WHITE} Authorization is invalid, Please replace it.")
                 time.sleep(6); exit(code=None)
-        else:
-            print(f"{Fore.RED}[ERROR]{Fore.WHITE} Invalid password or you are Ratelimited, Please try again.")
-            time.sleep(6); exit(code=None)
             
     async def listen(self):
         while True:
@@ -125,7 +150,6 @@ class GuardCord:
                                         subprocess.call("start.bat", shell=True); exit(code=None)
                                     else:
                                         subprocess.call("start.sh", shell=True); exit(code=None)
-
                                 
                     await asyncio.sleep(4)
                 else:
@@ -136,14 +160,11 @@ class GuardCord:
                 print(e)
                 
     def get_backup_code(self) -> str:
-        if len(self.backup_codes) == 0:
-            print(f"{Fore.RED}[ERROR]{Fore.WHITE} No backup codes left, Please generate new ones.")
+        if Database.get_backup_code_count() == 0:
+            print(f"{Fore.RED}[ERROR]{Fore.WHITE} No backup codes are left, Please generate new ones.")
             time.sleep(6); exit(code=None)
         else:
-            backup_code: str = self.backup_codes[0]
-            self.backup_codes.remove(backup_code)
-            
-            return backup_code
+            return Database.get_backup_code()[0]
                       
 if __name__ == "__main__":
     GuardCord_Instance: object = GuardCord(hash_ids=Database.get_sessions())
