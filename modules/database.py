@@ -6,8 +6,8 @@ cursor: object = connection.cursor()
 class Database:
     def create_table():
         cursor.execute("CREATE TABLE IF NOT EXISTS sessions (id_hash VARCHAR(255), operating_system VARCHAR(255), platform VARCHAR(255))")
-        cursor.execute("CREATE TABLE IF NOT EXISTS account_information (email VARCHAR(255), password VARCHAR(255), token VARCHAR(255))")
-        # cursor.execute("CREATE TABLE IF NOT EXISTS backup_codes (code VARCHAR(255))")
+        cursor.execute("CREATE TABLE IF NOT EXISTS account_information (password VARCHAR(255), token VARCHAR(255))")
+        cursor.execute("CREATE TABLE IF NOT EXISTS backup_codes (code VARCHAR(255))")
         connection.commit()
         
     def get_sessions():
@@ -36,7 +36,7 @@ class Database:
             cursor.execute("INSERT INTO account_information VALUES (?, ?, ?)", (email, password, token))
             connection.commit(); return True
         else:
-            cursor.execute("UPDATE account_information SET email = ?, password = ?, token = ?", (email, password, token))
+            cursor.execute("UPDATE account_information password = ?, token = ?", (password, token))
             connection.commit(); return True
             
     def update_password(new_password: str) -> bool:
@@ -44,7 +44,7 @@ class Database:
         result = cursor.fetchone()
         
         if result is None:
-            cursor.execute("INSERT INTO account_information VALUES (?, ?, ?)", (None, new_password, None))
+            cursor.execute("INSERT INTO account_information VALUES (?, ?)", (new_password, None))
             connection.commit(); return True
         else:
             cursor.execute("UPDATE account_information SET password = ?", (new_password,))
@@ -55,7 +55,7 @@ class Database:
         result = cursor.fetchone()
         
         if result is None:
-            cursor.execute("INSERT INTO account_information VALUES (?, ?, ?)", (None, None, token))
+            cursor.execute("INSERT INTO account_information VALUES (?, ?)", (None, token))
             connection.commit(); return True
         else:
             cursor.execute("UPDATE account_information SET token = ?", (token,))
