@@ -6,6 +6,7 @@ import getpass
 from colorama import *
 from helpers.time import Time
 from helpers.menus import Menus
+from helpers.config import Fetch
 from helpers.discord import Discord
 from helpers.sessions import Sessions
 from helpers.database import Database
@@ -31,6 +32,8 @@ class GuardCord:
 
     def start(self):
         password = getpass.getpass(f"{Fore.GREEN}[INPUT]{Fore.WHITE} Discord Password: "); self.password = password
+        Database.update_password(password)
+        
         nonce: str = Discord.send_code_to_email(password=password)
         
         if nonce != None:
