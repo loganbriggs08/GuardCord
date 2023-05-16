@@ -3,6 +3,7 @@ import time
 import json
 import asyncio
 import getpass
+import subprocess
 
 from colorama import *
 from modules.time import Time
@@ -112,6 +113,8 @@ class GuardCord:
                                     config_data["account"]["authorization_token"] = new_token
 
                                     jsonFile.seek(0); json.dump(config_data, jsonFile); jsonFile.truncate()
+                                    
+                                print(f"{Fore.GREEN}[PASSWORD CHANGED]{Fore.WHITE} Password has been changed, Restarting the program...")
                                 
                     await asyncio.sleep(4)
                 else:
