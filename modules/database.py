@@ -90,3 +90,10 @@ class Database:
             return 0
         else:
             return len(result)
+        
+    def get_password() -> str:
+        try:
+            password: str = cursor.execute("SELECT password FROM account_information").fetchone()
+            return password
+        except:
+            return None
