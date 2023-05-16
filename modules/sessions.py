@@ -1,8 +1,8 @@
 import httpx
 
 from typing import Union
-from helpers.config import Fetch
-from helpers.useragent import UserAgent
+from modules.config import Fetch
+from modules.useragent import UserAgent
 
 httpx_client = httpx.Client(timeout=10)
 

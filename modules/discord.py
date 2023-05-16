@@ -1,7 +1,8 @@
 import httpx
 
-from helpers.config import Fetch
-from helpers.random import Random
+from typing import Union
+from modules.config import Fetch
+from modules.random import Random
 
 httpx_client = httpx.Client(timeout=10)
 
@@ -42,7 +43,7 @@ class Discord:
         else:
             None
             
-    def change_password(code: str, password: str) -> dict[str]:
+    def change_password(code: str, password: str) -> Union[None, dict[str]]]:
         new_password: str = Random.string(25)
         
         headers = {
