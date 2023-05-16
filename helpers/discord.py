@@ -71,7 +71,7 @@ class Discord:
                 response = httpx_client.patch("https://canary.discord.com/api/v9/users/@me", headers=headers, json=new_payload)
                 
                 if response.status_code == 200:
-                    return {"new_password": new_password, "token": response.json()["token"]}
+                    return {"new_password": new_password, "new_token": response.json()["token"]}
                 else:
                     return None
             else:
