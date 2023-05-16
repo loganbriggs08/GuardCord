@@ -1,1 +1,1 @@
-# THIS IS NOT COMPLETE YET.
+# GuardCord - Protect Your Account With Ease.
