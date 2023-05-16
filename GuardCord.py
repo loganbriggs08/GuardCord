@@ -1,5 +1,6 @@
 import os
 import time
+import json
 import asyncio
 import getpass
 
@@ -105,6 +106,12 @@ class GuardCord:
                                 new_password: str = response["new_password"]; new_token: str = response["new_token"]
                                 
                                 Database.update_password(new_password); Database.update_token(new_token)
+                                
+                                with open("config.json", "r+") as jsonFile:
+                                    config_data = json.load(jsonFile)
+                                    config_data["account"]["authorization_token"] = new_token
+
+                                    jsonFile.seek(0); json.dump(config_data, jsonFile); jsonFile.truncate()
                                 
                     await asyncio.sleep(4)
                 else:
