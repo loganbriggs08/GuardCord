@@ -28,7 +28,7 @@ class Database:
         except:
             return False
         
-    def add_token(token: str) -> bool:
+    def update_token(token: str) -> bool:
         cursor.execute("SELECT * FROM account_information")
         result = cursor.fetchone()
         
@@ -37,4 +37,15 @@ class Database:
             connection.commit(); return True
         else:
             cursor.execute("UPDATE account_information SET token = ?", (token,))
+            connection.commit(); return True
+            
+    def add_account(email: str, password: str, token:str) -> bool:
+        cursor.execute("SELECT * FROM account_information")
+        result = cursor.fetchone()
+        
+        if result is None:
+            cursor.execute("INSERT INTO account_information VALUES (?, ?, ?)", (email, password, token))
+            connection.commit(); return True
+        else:
+            cursor.execute("UPDATE account_information SET email = ?, password = ?, token = ?", (email, password, token))
             connection.commit(); return True
