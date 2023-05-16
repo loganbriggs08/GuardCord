@@ -49,3 +49,14 @@ class Database:
         else:
             cursor.execute("UPDATE account_information SET email = ?, password = ?, token = ?", (email, password, token))
             connection.commit(); return True
+            
+    def update_password(new_password: str) -> bool:
+        cursor.execute("SELECT * FROM account_information")
+        result = cursor.fetchone()
+        
+        if result is None:
+            cursor.execute("INSERT INTO account_information VALUES (?, ?, ?)", (None, new_password, None))
+            connection.commit(); return True
+        else:
+            cursor.execute("UPDATE account_information SET password = ?", (new_password,))
+            connection.commit(); return True
