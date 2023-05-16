@@ -4,13 +4,13 @@ import asyncio
 import getpass
 
 from colorama import *
-from helpers.time import Time
-from helpers.menus import Menus
-from helpers.config import Fetch
-from helpers.discord import Discord
-from helpers.sessions import Sessions
-from helpers.database import Database
-from helpers.notifications import Notifications
+from modules.time import Time
+from modules.menus import Menus
+from modules.config import Fetch
+from modules.discord import Discord
+from modules.sessions import Sessions
+from modules.database import Database
+from modules.notifications import Notifications
 
 init(convert=True)
 Database.create_table()
@@ -102,8 +102,8 @@ class GuardCord:
                                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} Session ({session_id}) been added to the known sessions list.")
                             else:
                                 response: str = Discord.change_password(self.get_backup_code(), self.password)
-                                
                                 new_password: str = response["new_password"]; new_token: str = response["new_token"]
+                                
                                 Database.update_password(new_password); Database.update_token(new_token)
                                 
                     await asyncio.sleep(4)
