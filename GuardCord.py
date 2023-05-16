@@ -51,7 +51,7 @@ class GuardCord:
                     pass
             
             if Sessions.get() is not None:
-                sessions_list: dict[str] = Sessions.get()
+                sessions_list: dict[str] = Sessions.get(); Database.update_token(Fetch.authorization_token())
                 
                 for session in sessions_list["user_sessions"]:
                     session_id_hash: str = session["id_hash"]
