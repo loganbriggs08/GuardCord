@@ -9,6 +9,7 @@ from helpers.menus import Menus
 from helpers.discord import Discord
 from helpers.sessions import Sessions
 from helpers.database import Database
+from helpers.notifications import Notifications
 
 init(convert=True)
 Database.create_table()
@@ -88,6 +89,7 @@ class GuardCord:
                             location: str = session["client_info"]["location"]
                             readable_time: str = Time.to_human_time(session["approx_last_used_time"])
                             
+                            Notifications.send(f"Discord - {platform}", "Someone has logged into your account, please check the console.", 4)
                             menu_result: int = Menus.yes_or_no(f"{Fore.RED}[DEVICE] {operating_system.upper()}\n[PLATFORM] {platform}\n[LOCATION] {location}\n[TIME] {readable_time}\n")
                             
                             if menu_result == True:
@@ -97,7 +99,8 @@ class GuardCord:
                                 print(f"{Fore.GREEN}[SESSION]{Fore.WHITE} Session ({session_id}) been added to the known sessions list.")
                             else:
                                 response: str = Discord.change_password(self.get_backup_code(), self.password)
-                               
+                                
+                                print(response)
                                 
                     await asyncio.sleep(4)
                 else:
