@@ -21,9 +21,12 @@ class Database:
         
         return return_array
     
-    def add_session(id_hash: str, operating_system: str, platform: str):
-        cursor.execute("INSERT INTO sessions VALUES (?, ?, ?)", (id_hash, operating_system, platform))
-        connection.commit()
+    def add_session(id_hash: str, operating_system: str, platform: str) -> bool:
+        try:
+            cursor.execute("INSERT INTO sessions VALUES (?, ?, ?)", (id_hash, operating_system, platform))
+            connection.commit(); return True
+        except:
+            return False
         
     def add_token(token: str) -> bool:
         cursor.execute("SELECT * FROM account_information")
