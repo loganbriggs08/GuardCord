@@ -24,3 +24,14 @@ class Database:
     def add_session(id_hash: str, operating_system: str, platform: str):
         cursor.execute("INSERT INTO sessions VALUES (?, ?, ?)", (id_hash, operating_system, platform))
         connection.commit()
+        
+    def add_token(token: str) -> bool:
+        cursor.execute("SELECT * FROM account_information")
+        result = cursor.fetchone()
+        
+        if result is None:
+            cursor.execute("INSERT INTO account_information VALUES (?, ?, ?)", (None, None, token))
+            connection.commit(); return True
+        else:
+            cursor.execute("UPDATE account_information SET token = ?", (token,))
+            connection.commit(); return True
