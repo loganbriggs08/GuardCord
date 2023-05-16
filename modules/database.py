@@ -82,3 +82,12 @@ class Database:
             connection.commit()
             
             return [result[0]]
+        
+    def get_backup_code_count() -> int:
+        cursor.execute("SELECT * FROM backup_codes")
+        result = cursor.fetchall()
+        
+        if result is None:
+            return 0
+        else:
+            return len(result)
