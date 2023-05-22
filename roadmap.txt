@@ -1,1 +1,2 @@
 💾 Database Encryption - Encrypt all data in the Database so malicious actors can't just access it for the information they need.
+🚨 Warnings - Add warnings for when we are about to run out of Backup Codes.
