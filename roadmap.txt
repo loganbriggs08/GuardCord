@@ -1,0 +1,1 @@
+💾 Database Encryption - Encrypt all data in the Database so malicious actors can't just access it for the information they need.
